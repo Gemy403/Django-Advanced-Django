@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-
+from datetime import *
 
 # Create your models here.
 class Author(models.Model):
@@ -9,6 +9,12 @@ class Author(models.Model):
     bio = models.TextField(_("Bio"),max_length=500)
     def __str__(self):
         return self.name
+    
+    def age(self):
+        today = date.today()
+        age =  today.year - self.birth_date.year
+        return age
+
 
 class Book(models.Model):
     title = models.CharField(_("Title"), max_length=100)
@@ -18,6 +24,10 @@ class Book(models.Model):
    
     def __str__(self):
         return self.title
+    
+    @property
+    def formated_price(self):
+        return f"${self.price}"
     
 class Review(models.Model):
     book = models.ForeignKey(Book, verbose_name=_("Book"),related_name='review_book', on_delete=models.CASCADE)

@@ -3,8 +3,11 @@
 
     <ul>
 
-    {% for object in books %}
-        <li> {{object}} - {{object.review_book.all|average_rate}} Rate - {{object.price|format_price}} </li>
+    {% for object in authers %}
+        <li> {{object.name}} - Birth Date {{object.birth_date}}- Age: {{object.age}}</li>
     {% endfor %}
+    {% comment %} {% for object in books %}
+        <li> {{object}} - {{object.review_book.all|average_rate}} Rate - {{object.price|format_price}}  - {{object.formated_price}}</li>
+    {% endfor %} {% endcomment %}
 
     </ul>
