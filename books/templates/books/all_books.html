@@ -4,7 +4,7 @@
     <ul>
 
     {% for object in books %}
-        <li> {{object}} - {{object.price}} - {{object.price|format_price}} </li>
+        <li> {{object}} - {{object.review_book.all|average_rate}} Rate - {{object.price|format_price}} </li>
     {% endfor %}
 
     </ul>
