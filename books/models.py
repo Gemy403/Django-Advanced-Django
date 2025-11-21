@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from .log_activity import log_activity
 
 # Create your models here.
 class Author(models.Model):
@@ -9,7 +10,9 @@ class Author(models.Model):
     bio = models.TextField(_("Bio"),max_length=500)
     def __str__(self):
         return self.name
+    
 
+    
 class Book(models.Model):
     title = models.CharField(_("Title"), max_length=100)
     author = models.ForeignKey(Author, verbose_name=_("Author"), on_delete=models.CASCADE,related_name='book_author')
@@ -18,6 +21,13 @@ class Book(models.Model):
    
     def __str__(self):
         return self.title
+    @log_activity
+    def save(self, *args, **kwargs):
+        return super().save(*args, **kwargs)
+    
+    @log_activity
+    def delete(self):
+        return super().delete()
     
 class Review(models.Model):
     book = models.ForeignKey(Book, verbose_name=_("Book"),related_name='review_book', on_delete=models.CASCADE)
