@@ -1,6 +1,10 @@
-<ul>
-{% for object in books %}
-    <li> {{object}} </li>
+{% load custome_filter %}
+{{books|length}}
 
-{% endfor %}
-</ul>
+    <ul>
+
+    {% for object in books %}
+        <li> {{object}} - {{object.price}} - {{object.price|format_price}} </li>
+    {% endfor %}
+
+    </ul>
