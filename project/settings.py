@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'books',
+    'django_db_logger',
+
 
 ]
 
@@ -138,39 +140,73 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-LOGGING = {
-    'version':1,
-    'disable_existing_loggers': False,
+# LOGGING = {
+#     'version':1,
+#     'disable_existing_loggers': False,
 
-    # يعني لما يحصل لوغ اعمل اطبع ولا اخزن في ملف ولا اعمل ايه ؟
-    'handlers':{
-      'console':{
-        'class':'logging.StreamHandler' # ده اسم ال handler اللي بيطبع الlog علي الشاشة
-      },
-      'file':{
-        'class':'logging.FileHandler', #ده انا بأخزن الlogs
-        'filename':'myfile.log',#اسم الفايل ايه ؟
-        'formatter':'verbose',# كده انا باقوله خزن لي بشكل الفورمات اللي اسمه verbose
-      },
-    },
-    # انت عاوز تعمل log لايه في السيستم زي ال models ولا ال views ولا النظام كامل ولا ايه ؟
-    'loggers':{
-# كده انا هعمل علي النظام كله 
-      '':{
-        'handlers':['console','file'],
-        'level':'NOTSET',
-        }, 
-      # وكمان هاحدد اي handler يعني لوعمل log يخزن ولا يعرض علي الشاشة 
-      # 'Books.Views': {} like that i will log on views of Books
-    },
-    # ده شكل والاستايل بتاع ال log message اللي هتظهر
-    'formatters':{
+#     # يعني لما يحصل لوغ اعمل اطبع ولا اخزن في ملف ولا اعمل ايه ؟
+#     'handlers':{
+#       'console':{
+#         'class':'logging.StreamHandler' # ده اسم ال handler اللي بيطبع الlog علي الشاشة
+#       },
+#       'file':{
+#         'class':'logging.FileHandler', #ده انا بأخزن الlogs
+#         'filename':'myfile.log',#اسم الفايل ايه ؟
+#         'formatter':'verbose',# كده انا باقوله خزن لي بشكل الفورمات اللي اسمه verbose
+#       },
+#     },
+#     # انت عاوز تعمل log لايه في السيستم زي ال models ولا ال views ولا النظام كامل ولا ايه ؟
+#     'loggers':{
+# # كده انا هعمل علي النظام كله 
+#       '':{
+#         'handlers':['console','file'],
+#         'level':'NOTSET',
+#         }, 
+#       # وكمان هاحدد اي handler يعني لوعمل log يخزن ولا يعرض علي الشاشة 
+#       # 'Books.Views': {} like that i will log on views of Books
+#     },
+#     # ده شكل والاستايل بتاع ال log message اللي هتظهر
+#     'formatters':{
       
-        'verbose':{
-          'format':'%(asctime)s (%(levelname)s) - %(name)s - %(message)s'
-        }
+#         'verbose':{
+#           'format':'%(asctime)s (%(levelname)s) - %(name)s - %(message)s'
+#         }
+#     },
+
+
+
+#   }
+
+
+
+# logging of django db logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
     },
-
-
-
-  }
+    'handlers': {
+        'db_log': {
+            'level': 'DEBUG',
+            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler'
+        },
+    },
+    'loggers': {
+        'db': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'django.request': { # logging 500 errors to database
+            'handlers': ['db_log'],
+            'level': 'ERROR',
+            'propagate': False,
+        }
+    }
+}
