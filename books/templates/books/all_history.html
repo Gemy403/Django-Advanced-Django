@@ -1,0 +1,58 @@
+<h2>All History Logs</h2>
+
+<table border="1" width="100%">
+    <tr>
+        <th>Date</th>
+        <th>Change</th>
+        <th>User</th>
+        <th>Model</th>
+        <th>Object</th>
+    </tr>
+
+    {% for h in page_obj %}
+<tr>
+    <td>{{ h.history_date }}</td>
+
+    <td>
+        {% if h.history_type == "+" %} Created
+        {% elif h.history_type == "~" %} Updated
+        {% elif h.history_type == "-" %} Deleted
+        {% endif %}
+    </td>
+
+    <td>{{ h.history_user|default:"System" }}</td>
+
+    <td>{{ h.model_name }}</td>
+
+    <td>{{ h.instance }}</td>
+</tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+<div style="margin-top:20px;">
+    <span>
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+
+    <div>
+
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+                <strong>{{ num }}</strong>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+
+    </div>
+</div>
