@@ -135,3 +135,42 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+LOGGING = {
+    'version':1,
+    'disable_existing_loggers': False,
+
+    # يعني لما يحصل لوغ اعمل اطبع ولا اخزن في ملف ولا اعمل ايه ؟
+    'handlers':{
+      'console':{
+        'class':'logging.StreamHandler' # ده اسم ال handler اللي بيطبع الlog علي الشاشة
+      },
+      'file':{
+        'class':'logging.FileHandler', #ده انا بأخزن الlogs
+        'filename':'myfile.log',#اسم الفايل ايه ؟
+        'formatter':'verbose',# كده انا باقوله خزن لي بشكل الفورمات اللي اسمه verbose
+      },
+    },
+    # انت عاوز تعمل log لايه في السيستم زي ال models ولا ال views ولا النظام كامل ولا ايه ؟
+    'loggers':{
+# كده انا هعمل علي النظام كله 
+      '':{
+        'handlers':['console','file'],
+        'level':'NOTSET',
+        }, 
+      # وكمان هاحدد اي handler يعني لوعمل log يخزن ولا يعرض علي الشاشة 
+      # 'Books.Views': {} like that i will log on views of Books
+    },
+    # ده شكل والاستايل بتاع ال log message اللي هتظهر
+    'formatters':{
+      
+        'verbose':{
+          'format':'%(asctime)s (%(levelname)s) - %(name)s - %(message)s'
+        }
+    },
+
+
+
+  }
