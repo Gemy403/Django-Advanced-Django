@@ -10,6 +10,7 @@ class Author(models.Model):
     def __str__(self):
         return self.name
     
+    @property
     def age(self):
         today = date.today()
         age =  today.year - self.birth_date.year
