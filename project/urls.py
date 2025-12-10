@@ -19,10 +19,14 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 from books.views import all_history
+from books.api import BookDetailUpdateDestroyAPI,BookListCreateAPI
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('all_history/', all_history,name='all_history'),
+    path('books/', BookListCreateAPI.as_view()),
+    path('books/<int:pk>/', BookDetailUpdateDestroyAPI.as_view()),
+
 ]
 
 

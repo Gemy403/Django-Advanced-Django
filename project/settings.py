@@ -41,6 +41,11 @@ INSTALLED_APPS = [
     'books',
     'django_db_logger',
     'simple_history',
+    
+    'rest_framework',
+
+
+
 
 
 
