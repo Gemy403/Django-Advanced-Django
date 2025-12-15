@@ -38,11 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "graphene_django",
+
     'books',
     'django_db_logger',
     'simple_history',
-    
     'rest_framework',
+
 
 
 
@@ -218,4 +220,13 @@ LOGGING = {
             'propagate': False,
         }
     }
+}
+
+
+
+
+
+# Grapgh-QL
+GRAPHENE = {
+    "SCHEMA": "books.schema.schema"
 }
