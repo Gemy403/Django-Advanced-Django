@@ -1,6 +1,7 @@
 import graphene
 from .models import Book,Author,Review
 from graphene_django import DjangoObjectType
+from django.db.models import Q
 
 class AuthorsType(DjangoObjectType):
     class Meta:
@@ -76,19 +77,33 @@ class Mutation(graphene.ObjectType):
     delete_book = DeleteBookMutation.Field()
 
 class Query(graphene.ObjectType):
-    authors = graphene.List(AuthorsType)
-    books = graphene.List(BookType)
+    authors = graphene.List(AuthorsType,search = graphene.String())
+    books = graphene.List(BookType,search = graphene.String())
     ## update
     book = graphene.Field(BookType,book_id=graphene.ID(required=True))
     author = graphene.Field(AuthorsType,author_id=graphene.ID(required=True))
 
     
-    def resolve_authors(self,info):
-        return Author.objects.all()
+    def resolve_authors(self,info,search:None,order=None):
+        query = Author.objects.all()
+        if search:
+            query=query.filter(
+                Q(name__icontains=search)
+            )
+        if query:
+            query = query.order_by(order)
+        return query
     
-    def resolve_books(self,info):
-        return Book.objects.all()
+    def resolve_books(self,info,search:None,order=None):
+        query = Book.objects.all()
+        if search:
+            query=query.filter(
+                Q(title__icontains=search)
+            )
+        if query:
+            query = query.order_by(order)
 
+        return query
     def resolve_book(self,info,book_id):
         return Book.objects.get(id=book_id)
 
